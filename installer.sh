@@ -56,7 +56,9 @@ sed \
     -e "s#{{{ symbol }}}#${symbol}#" \
     -e "s#{{{ dev }}}#${dev}#" \
     /dot/util/configuration.tmpl.nix > /mnt/etc/nixos/configuration.nix
+cp /dot/disko-config.nix /mnt/etc/nixos/
 
+# Install.
 nixos-install --root /mnt --no-root-passwd --show-trace
 
 echo All done. Reboot.
