@@ -35,6 +35,10 @@ git clone --depth 1 https://github.com/talbergs/dot /dot
 disko=$(nix eval --file ./disko-config.nix --arg disk "\"$dev\"" disk)
 echo "{ disko = { devices = { disk = ${disko}; }; }; }" > /tmp/disko.nix
 
+# Revert previous attempts.
+[ -f /mnt/swapfile ] && swapoff /mnt/swapfile
+umount -R /mnt || true
+
 # Format and mount.
 nix run github:nix-community/disko -- --mode disko /tmp/disko.nix
 
