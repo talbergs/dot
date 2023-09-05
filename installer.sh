@@ -19,11 +19,10 @@ set -x
 # Fix the live-cd config.
 export NIX_CONFIG="extra-experimental-features = nix-command flakes"
 
-# Pull some runtime for this script.
-nix-env -i fzf git
-
 # Pick the disk to install to.
 if [ -z "$dev" ]; then
+    # Pull some runtime for this script.
+    nix-env -i fzf
     dev=$(lsblk -d -o path,size,model | sed 1d | fzf --prompt "Choose the disk > ")
     dev=${dev%% *}
 fi
@@ -50,6 +49,6 @@ sed \
     -e "s#{{{ dev }}}#${dev}#" \
     /mnt/dot/util/configuration.tmpl.nix > /mnt/etc/nixos/configuration.nix
 
-nixos-install --root /mnt --no-root-passwd
+nixos-install --root /mnt --no-root-passwd --show-trace
 
 echo All done. Reboot.
