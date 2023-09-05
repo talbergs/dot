@@ -28,8 +28,8 @@ if [ -z "$dev" ]; then
 fi
 
 # Pull dots into root fs.
-[ -d /mnt/dot ] && rm -rf /mnt/dot
-git clone --depth 1 https://github.com/talbergs/dot /mnt/dot
+[ -d /dot ] && rm -rf /dot
+git clone --depth 1 https://github.com/talbergs/dot /dot
 
 # Eval fs conf.
 disko=$(nix eval --file ./disko-config.nix --arg disk "\"$dev\"" disk)
@@ -45,13 +45,13 @@ mkswap $_
 swapon $_
 
 # Generate the config for hardware.
-nixos-generate-config --no-filesystems --root /mnt
+nixos-generate-config --force --no-filesystems --root /mnt
 
 # Fill template.
 sed \
     -e "s#{{{ symbol }}}#${symbol}#" \
     -e "s#{{{ dev }}}#${dev}#" \
-    /mnt/dot/util/configuration.tmpl.nix > /mnt/etc/nixos/configuration.nix
+    /dot/util/configuration.tmpl.nix > /mnt/etc/nixos/configuration.nix
 
 nixos-install --root /mnt --no-root-passwd --show-trace
 
