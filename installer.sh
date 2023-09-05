@@ -32,8 +32,8 @@ fi
 git clone --depth 1 https://github.com/talbergs/dot /mnt/dot
 
 # Eval fs conf.
-disko=$(nix eval --file ./disko-config.nix --arg disk $dev)
-echo "{ disko = { devices = ${disko}; }; }" > /tmp/disko.nix
+disko=$(nix eval --file ./disko-config.nix --arg disk "\"$dev\"" disk)
+echo "{ disko = { devices = { disk = ${disko}; }; }; }" > /tmp/disko.nix
 
 # Format and mount.
 nix run github:nix-community/disko -- --mode disko /tmp/disko.nix
