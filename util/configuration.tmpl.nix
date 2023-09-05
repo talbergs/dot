@@ -21,7 +21,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     packages = with pkgs; [ neovim ];
-  }
+  };
 
   system.stateVersion = "23.05";
 }
