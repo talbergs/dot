@@ -9,7 +9,6 @@ fi
 echo "What symbol will be used as password, user, hostname..." 
 read -p "Provide symbol in characters [a-z]+: " symbol
 
-cd /mnt/etc/nixos
 set -x
 
 # Fix the live-cd config.
@@ -19,7 +18,7 @@ export NIX_CONFIG="extra-experimental-features = nix-command flakes"
 nix-env -i fzf git
 
 # Pick the disk to install to.
-dev=$(lsblk -d -o path,size,model | fzf --prompt "Choose the disk > ")
+dev=$(lsblk -d -o path,size,model | sed 1d | fzf --prompt "Choose the disk > ")
 dev=${dev%% *}
 
 # Pull dots into root fs.
@@ -41,9 +40,8 @@ nixos-generate-config --no-filesystems --root /mnt
 sed \
     -e "s#{{{ symbol }}}#${symbol}#" \
     -e "s#{{{ dev }}}#${dev}#" \
-    /mnt/dot/util/configuration.tmpl.nix > ./configuration.nix
+    /mnt/dot/util/configuration.tmpl.nix > /mnt/etc/nixos/configuration.nix
 
-# nixos-install --root /mnt --flake /mnt/dot#nixos
 nixos-install --root /mnt --no-root-passwd
 
-# reboot
+echo All done. Reboot.
