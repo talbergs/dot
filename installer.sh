@@ -31,11 +31,15 @@ fi
 [ -d /mnt/dot ] && rm -rf /mnt/dot
 git clone --depth 1 https://github.com/talbergs/dot /mnt/dot
 
+# Eval fs conf.
+disko=$(nix eval --file ./disko-config.nix --arg disk $dev)
+echo "{ disko = { devices = ${disko}; }; }" > /tmp/disko.nix
+
 # Format and mount.
-nix run github:nix-community/disko -- --mode disko /mnt/dot/disko-config.nix --arg disk $dev
+nix run github:nix-community/disko -- --mode disko /tmp/disko.nix
 
 # Make swap.
-fallocate 8G /mnt/swapfile
+fallocate -l 8G /mnt/swapfile
 chmod 600 $_
 mkswap $_
 swapon $_
