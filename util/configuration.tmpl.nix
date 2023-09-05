@@ -11,7 +11,7 @@
 
   disko.devices = import ./disko-config.nix {
     disk = "{{{ dev }}}";
-  }
+  };
 
   networking.hostName = "{{{ symbol }}}";
   networking.networkmanager.enable = true;
