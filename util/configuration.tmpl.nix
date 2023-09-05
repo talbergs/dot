@@ -1,4 +1,4 @@
-{ pkgs, pkgs, ... } : {
+{ pkgs, ... } : {
   imports = [
     ./hardware-configuration.nix
     "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
